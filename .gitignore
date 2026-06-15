@@ -216,3 +216,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Локальные инструкции и служебный контекст, которые не отправляются в GitHub по текущему правилу проекта
+AGENTS.md
+_project_context/
+_local_runtime/
