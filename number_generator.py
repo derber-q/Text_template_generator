@@ -3,6 +3,9 @@
 # Импортируется random, чтобы получать случайные цифровые части номера без внешних сервисов.
 import random
 
+# Импортируется sys, чтобы в `.exe`-сборке искать редактируемый файл исключений рядом с программой.
+import sys
+
 # Импортируется Path, чтобы читать выбранный пользователем `.txt`-файл.
 from pathlib import Path
 
@@ -10,8 +13,15 @@ from pathlib import Path
 from validators import ValidationError, parse_forbidden_combinations
 
 
-# Постоянный файл запретов лежит рядом с исходными модулями в корне проекта.
-PERMANENT_FORBIDDEN_COMBINATIONS_FILE = Path(__file__).resolve().with_name("permanent_forbidden_combinations.txt")
+# Имя постоянного файла запретов используется и в исходниках, и рядом с собранным `.exe`.
+PERMANENT_FORBIDDEN_COMBINATIONS_FILENAME = "permanent_forbidden_combinations.txt"
+
+# Постоянный файл запретов лежит рядом с исходными модулями, а в `.exe`-сборке — рядом с исполняемым файлом.
+PERMANENT_FORBIDDEN_COMBINATIONS_FILE = (
+    Path(sys.executable).resolve().with_name(PERMANENT_FORBIDDEN_COMBINATIONS_FILENAME)
+    if getattr(sys, "frozen", False)
+    else Path(__file__).resolve().with_name(PERMANENT_FORBIDDEN_COMBINATIONS_FILENAME)
+)
 
 
 class NumberGenerationError(ValueError):

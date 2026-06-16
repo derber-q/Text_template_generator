@@ -6,6 +6,9 @@ import queue
 # Импортируется threading, чтобы длительная генерация DOCX не блокировала графический интерфейс.
 import threading
 
+# Импортируется sys, чтобы находить ресурсы внутри собранного `.exe`.
+import sys
+
 # Импортируется tkinter, чтобы создать локальное desktop-окно без веб-сервера.
 import tkinter as tk
 
@@ -44,8 +47,25 @@ from validators import (
 # Ширина подсказок задается один раз, чтобы длинные русские инструкции не растягивали окно.
 HELP_WRAP_LENGTH = 720
 
-# Путь к иконке строится относительно файла GUI, чтобы приложение находило asset после переноса проекта.
-APP_ICON_PATH = Path(__file__).resolve().parent / "assets" / "app_icon.png"
+def _resource_path(relative_path: str) -> Path:
+    """Возвращает путь к ресурсу приложения для обычного запуска и для `.exe`.
+
+    relative_path: относительный путь ресурса внутри проекта или PyInstaller-пакета.
+    Возвращает абсолютный Path к ресурсу.
+    Побочных эффектов нет.
+    """
+    # PyInstaller распаковывает bundled-ресурсы во временный каталог `_MEIPASS`.
+    bundled_root = getattr(sys, "_MEIPASS", None)
+
+    if bundled_root is not None:
+        return Path(bundled_root) / relative_path
+
+    # При обычном Python-запуске ресурсы лежат рядом с исходными файлами проекта.
+    return Path(__file__).resolve().parent / relative_path
+
+
+# Путь к иконке строится через функцию ресурсов, чтобы работать и из исходников, и из PyInstaller `.exe`.
+APP_ICON_PATH = _resource_path("assets/app_icon.png")
 
 
 @dataclass(frozen=True)
