@@ -19,8 +19,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent
 # Каталог build содержит промежуточные файлы PyInstaller и может безопасно пересоздаваться.
 BUILD_DIR = PROJECT_ROOT / "build"
 
-# Имя готового `.exe` выбрано коротким и понятным пользователю.
-APP_NAME = "TextTemplateGenerator"
+# Имя готового `.exe` совпадает с пользовательским запускным файлом.
+APP_NAME = "start"
 
 # Готовый `.exe` лежит в корне проекта, чтобы после клонирования его было легко найти и запустить.
 ROOT_EXE_PATH = PROJECT_ROOT / f"{APP_NAME}.exe"
